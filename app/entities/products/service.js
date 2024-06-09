@@ -1,5 +1,18 @@
 import knex from "@/database";
 
+export async function getBySearch(searchTerm) {
+    const data = await knex('products')
+        .join('categories','products.category_id','categories.id')
+        .join('prices','prices.product_id','products.id')
+        .whereILike('products.name',`%${searchTerm}%`)
+        .orWhereILike('categories.name', `%${searchTerm}%`)
+        .select('products.*',
+                'prices.price',
+                'categories.name as category_name'
+                )
+        return data
+}
+
 export async function getById(productId){
     const data = await knex('products')
         .join('categories','products.category_id','categories.id')
