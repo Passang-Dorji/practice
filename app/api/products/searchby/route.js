@@ -1,13 +1,10 @@
-import { getById,getByName,getByCategoryName } from "@/app/entities/products/service";
-import knex from "@/database";
+import { getBySearch,getById } from "@/app/entities/products/service";
 
 export async function GET(req){
+    const search = req.nextUrl.searchParams.get('search')
     const productID = req.nextUrl.searchParams.get('product_id')
-    const productName = req.nextUrl.searchParams.get('product_name')
-    const categoryName = req.nextUrl.searchParams.get('category_name')
     let data;
     if(productID)  data = await getById(productID)
-    else if(productName) data = await getByName(productName) 
-    else if(categoryName) data = await getByCategoryName(categoryName)
+    else if(search) data = await getBySearch(search) 
     return Response.json({data})
 }

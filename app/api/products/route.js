@@ -9,7 +9,7 @@ export async function GET(){
 }
 
 export async function POST(req){
-    const {name,description,category_id,price}= await req.json()
+    const {name,description,category_id,price,quantity}= await req.json()
        const data = await knex.transaction(async(trx)=>{
         const [createdProducts] = await trx('products').insert({
             name,
@@ -22,7 +22,7 @@ export async function POST(req){
             product_id:createdProducts.id
         })
         await trx('inventory').insert({
-            quantity:0,
+            quantity,
             product_id:createdProducts.id,
             created_at:new Date().toISOString()
         })
